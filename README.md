@@ -41,12 +41,24 @@ time it was taken (`source_last_updated`), so overnight repeats don't skew the a
 
 ## Run the analysis
 
+First time (needs the [GitHub CLI](https://cli.github.com/) and Python):
+
 ```bash
-git pull                      # get the latest data
+gh repo clone Rassa1/BRIC-tracker   # makes a BRIC-tracker folder
+cd BRIC-tracker                     # analyze.py lives in here
 pip install matplotlib
-python analyze.py             # writes heatmap.png, prints the 5 emptiest slots
+python analyze.py                   # writes heatmap.png, prints the 5 emptiest slots
+```
+
+After that, open a terminal **inside the `BRIC-tracker` folder** and run:
+
+```bash
+git pull                            # get the latest data
+python analyze.py
 python analyze.py --min-samples 3   # only trust slots seen at least 3 times
 ```
+
+If you get `can't open file ... analyze.py`, you're in the wrong folder: `cd BRIC-tracker` first.
 
 Give it a couple of weeks before trusting the rankings. Early on, most slots
 have just one headcount behind them (shown as `n=`).
