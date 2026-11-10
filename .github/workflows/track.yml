@@ -2,8 +2,8 @@ name: Log 3rd floor count
 
 on:
   schedule:
-    # Every 30 minutes (UTC). Off the :00/:30 marks because GitHub delays
-    # top-of-hour scheduled runs the most.
+    # Backup only. GitHub drops many scheduled runs, so the main 30-minute
+    # timer is an external cron-job.org job calling workflow_dispatch (see README).
     - cron: "7,37 * * * *"
   workflow_dispatch:
 

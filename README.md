@@ -10,9 +10,10 @@ so you can find the emptiest times to go.
   but from the JSON API behind it
   (`goboardapi.azurewebsites.net/api/FacilityCount/GetCountsByAccount`), and appends
   one row to `data.csv`. Python standard library only.
-- **`.github/workflows/track.yml`** runs `track.py` every 30 minutes on GitHub Actions
-  (and on demand from the Actions tab → *Log 3rd floor count* → *Run workflow*), then
-  commits `data.csv` back to the repo.
+- **`.github/workflows/track.yml`** runs `track.py` on GitHub Actions, then commits
+  `data.csv` back to the repo. A free [cron-job.org](https://cron-job.org) job starts
+  it every 30 minutes (see *Timer* below). You can also start it by hand from the Actions
+  tab → *Log 3rd floor count* → *Run workflow*.
 - **`analyze.py`** turns `data.csv` into `heatmap.png` and prints the 5 emptiest slots.
 
 The site reports the 3rd floor as four zones (South, Northeast, North, West, 70 each).
@@ -63,9 +64,19 @@ If you get `can't open file ... analyze.py`, you're in the wrong folder: `cd BRI
 Give it a couple of weeks before trusting the rankings. Early on, most slots
 have just one headcount behind them (shown as `n=`).
 
-## Notes
+## Timer
 
-- GitHub's scheduler often runs late (5–20 minutes) and occasionally skips a run.
-  That's fine for averages.
-- GitHub can pause scheduled workflows in repos with no activity for 60 days. If
-  rows stop appearing, re-enable it under **Actions → Log 3rd floor count**.
+GitHub's built-in `schedule` trigger is unreliable for this: on the first day it
+started only 2 of about 32 runs. The real timer is a cron-job.org job that calls
+GitHub's "run workflow" API every 30 minutes:
+
+- `POST https://api.github.com/repos/Rassa1/BRIC-tracker/actions/workflows/track.yml/dispatches`
+  with body `{"ref":"main"}` and a fine-grained token limited to this repo with
+  only **Actions: Read and write**.
+- GitHub's own schedule stays in the workflow as a backup. Extra rows are harmless,
+  because `analyze.py` counts each headcount once.
+
+**The token expires on 2027-02-08.** Before then, regenerate it at
+github.com/settings/personal-access-tokens (open *bric-tracker-cron* → *Regenerate*)
+and paste the new value into the cron-job.org job's `Authorization: Bearer …` header.
+If cron-job.org starts emailing you about failed runs, this is the likely reason.
