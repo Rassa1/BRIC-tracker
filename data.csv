@@ -736,3 +736,4 @@ time,weekday,hour,count,capacity,percent,status,source_last_updated,south,northe
 2026-11-24 08:30,Tuesday,8,22,280,7.9,open,2026-11-24 08:18,1,11,9,1,
 2026-11-24 09:00,Tuesday,9,22,280,7.9,open,2026-11-24 08:18,1,11,9,1,
 2026-11-24 09:27,Tuesday,9,28,280,10.0,open,2026-11-24 09:06,2,9,15,2,
+2026-11-24 09:30,Tuesday,9,28,280,10.0,open,2026-11-24 09:06,2,9,15,2,
